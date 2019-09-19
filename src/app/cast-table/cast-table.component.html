@@ -1,0 +1,22 @@
+<p-table [value]="casts" [style]="{'overflow':'auto!important'}"
+[resizableColumns]="true" columnResizeMode="expand"
+[responsive]="true" [autoLayout]="true">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Provider</th>
+      <th>Category</th>
+      <th>Name</th>
+      <th>Episodes</th>
+      <th>Relased At</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-cast>
+    <tr>
+      <td>{{cast.provider}}</td>
+      <td>{{cast.category}}</td>
+      <td (click)="showEpisodes($event, cast)"><img src='{{cast.image}}' width='40'>{{cast.name}}</td>
+      <td>{{cast.episodes.length}}</td>
+      <td>{{cast.releasedAt | timeAgo}}</td>
+    </tr>
+  </ng-template>
+</p-table>
