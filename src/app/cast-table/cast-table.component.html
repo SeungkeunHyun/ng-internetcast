@@ -1,13 +1,17 @@
-<p-table [value]="casts" [style]="{'overflow':'auto!important'}"
+<p-table #castTable [value]="casts" [style]="{'overflow':'auto!important'}"
 [resizableColumns]="true" columnResizeMode="expand"
-[responsive]="true" [autoLayout]="true">
+[responsive]="true" [autoLayout]="true" [paginator]="true" [rows]="10" [globalFilterFields]="['name']">
+  <ng-template pTemplate="caption">
+    <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+    <input type="text" pInputText size="50" placeholder="Global Filter" (input)="castTable.filterGlobal($event.target.value, 'contains')" style="width:auto">
+  </ng-template>
   <ng-template pTemplate="header">
     <tr>
       <th>Provider</th>
       <th>Category</th>
-      <th>Name</th>
+      <th [pSortableColumn]="name">Name</th>
       <th>Episodes</th>
-      <th>Relased At</th>
+      <th [pSortableColumn]="releasedAt">Relased At</th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-cast>
@@ -20,3 +24,4 @@
     </tr>
   </ng-template>
 </p-table>
+<app-popup [cast]="selectedCast"></app-popup>

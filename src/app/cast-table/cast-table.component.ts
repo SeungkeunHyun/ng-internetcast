@@ -1,3 +1,4 @@
+import { PlayerService } from 'src/app/core/services/player.service';
 import { PopupComponent } from './../sub/popup/popup.component';
 import { HttpService } from './../core/services/http.service';
 import { Component, OnInit } from '@angular/core';
@@ -12,13 +13,14 @@ import { DialogService } from 'primeng/api';
 })
 export class CastTableComponent implements OnInit {
 
-  casts: Cast[];
-  constructor(private httpService: HttpService, private x2jService: NgxXml2jsonService, private dlgService: DialogService) { }
+  casts: any[];
+  selectedCast: Cast;
+  constructor(private httpService: HttpService, private x2jService: NgxXml2jsonService, private playerService: PlayerService) { }
 
   ngOnInit() {
     this.httpService.get(`http://skhyun.iptime.org/htmlv5/podcast/json/podcastlist.json?q=${new Date().getTime()}`)
-    .subscribe(res  => {
-      this.casts = res;
+    .subscribe(result  => {
+      this.casts = result;
       this.casts.forEach(i => i.episodes = []);
       this.fetchRSS();
       //console.log(this.casts);
@@ -29,7 +31,7 @@ export class CastTableComponent implements OnInit {
     let episode = {};
     let episode_uids = [];
     scr = scr.trim() + ";episode";
-    const ctx = eval(scr);
+    const ctx: any = eval(scr);
     const eps = [];
     for(let k in ctx) {
       eps.push(ctx[k]);
@@ -48,7 +50,8 @@ export class CastTableComponent implements OnInit {
       switch(c.provider) {
         case 'podbbang':
           for(let p = 1; p < 4; p++) {
-            this.httpService.getMimeText(`http://www.podbbang.com/podbbangchnew/episode_list?id=${c.podcastID}&page=${p}`, 'text/plain').subscribe(h => {
+            this.httpService.getMimeText(`http://www.podbbang.com/podbbangchnew/episode_list?id=${c.podcastID}&page=${p}`
+            , 'text/plain').subscribe(h => {
               const startOffset = h.indexOf("var ischsell	= 'N'");
               let scriptPart = h.substring(startOffset);
               scriptPart = scriptPart.substring(0, scriptPart.indexOf('if(episode_uids'));
@@ -67,7 +70,7 @@ export class CastTableComponent implements OnInit {
             try {
               const domp = new DOMParser();
               const xdoc = domp.parseFromString(x, 'text/xml');
-              const jdoc = this.x2jService.xmlToJson(xdoc);
+              const jdoc: any = this.x2jService.xmlToJson(xdoc);
               c.episodes = this.mapiTunes(jdoc.rss.channel.item);
               //console.log(c);
               c.episodes.sort((a,b) => { new Date(a.pubDate) > new Date(b.pubDate) });
@@ -101,7 +104,6 @@ export class CastTableComponent implements OnInit {
   }
 
   showEpisodes(e, dat: Cast) {
-    console.log(e, dat);
-    this.dlgService.open(PopupComponent, {data: {episodes: dat.episodes}, header: dat.name, width: '70%'});
+    this.selectedCast = dat;
   }
 }

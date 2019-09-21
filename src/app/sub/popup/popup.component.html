@@ -1,1 +1,37 @@
-<p>popup works!</p>
+<p-dialog *ngIf="cast != null" [header]="cast.name" [(visible)]="display" [modal]="true">
+  <p-panel>
+    <p-header>
+      <div class="ui-g">
+        <div class="ui-lg-2 ui-md-2 ui-sm-2">
+          <img [src]="cast.image" width="100">
+        </div>
+        <div class="ui-lg-10 ui-md-10 ui-sm-10">
+          <ul>
+            <li>Provider: {{cast.provider}}</li>
+            <li>Last released at: {{cast.releasedAt}} ({{cast.releasedAt | timeAgo}})</li>
+            <li>Episodes: {{cast.episodes.length}}</li>
+          </ul>
+        </div>
+      </div>
+    </p-header>
+  </p-panel>
+  <br/>
+  <p-table [value]="cast.episodes" [style]="{'overflow':'auto!important'}" [resizableColumns]="true" columnResizeMode="expand" [responsive]="true" [autoLayout]="true">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Title</th>
+        <th>Released at</th>
+        <th>Duration</th>
+        <th>Action</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-ep>
+      <tr>
+        <td><a (click)="playThis($event, ep)">{{ep.title}}</a></td>
+        <td>{{ep.pubDate}}</td>
+        <td>{{ep.duration}}</td>
+        <td>Actions</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-dialog>

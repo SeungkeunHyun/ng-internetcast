@@ -1,3 +1,4 @@
+import { PopupComponent } from './sub/popup/popup.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -9,9 +10,12 @@ import { CastTableComponent } from './cast-table/cast-table.component';
 import { TableModule } from 'primeng/table';
 import { HttpClientModule } from '@angular/common/http';
 import { TimeAgoPipe } from 'time-ago-pipe';
-import { DynamicDialogModule } from 'primeng/dynamicdialog';
-import { PopupComponent } from './sub/popup/popup.component';
-
+import { DialogModule } from 'primeng/dialog';
+import { PanelModule } from 'primeng/panel';
+import { PlayerComponent } from './sub/player/player.component';
+import { ToggleButtonModule } from 'primeng/togglebutton';
+import { SidebarModule } from 'primeng/sidebar';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -19,15 +23,23 @@ import { PopupComponent } from './sub/popup/popup.component';
     MainComponent,
     CastTableComponent,
     TimeAgoPipe,
+    PopupComponent,
+    PlayerComponent
+  ],
+  entryComponents: [
     PopupComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    FormsModule,
     TableModule,
     HttpClientModule,
-    DynamicDialogModule
+    DialogModule,
+    PanelModule,
+    ToggleButtonModule,
+    SidebarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

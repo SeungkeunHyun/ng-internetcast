@@ -1,0 +1,18 @@
+<style>
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: red;
+  color: white;
+  text-align: center;
+}
+</style>
+<footer class="footer">
+  <p-panel *ngIf="episode">
+    <p-header>{{episode.title}}</p-header>
+    <audio autoplay controls src="{{episode.mediaURL}}"></audio>
+  </p-panel>
+</footer>
+
