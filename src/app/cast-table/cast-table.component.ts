@@ -44,6 +44,10 @@ export class CastTableComponent implements OnInit {
     return new Date(Date.parse(ymd.substring(0,4) + '-' + ymd.substring(4, 6) + '-' + ymd.substring(6)));
   }
 
+  getPodtyEpisodes(hscr: string) {
+    console.log(hscr);
+  }
+
   fetchRSS() {
     this.casts.forEach(c => {
       //console.log(c);
@@ -64,6 +68,13 @@ export class CastTableComponent implements OnInit {
           }
           break;
         case 'podty':
+          this.httpService.getMimeText(`http://www.podty.me/cast/${c.podcastID}`
+            , 'text/plain').subscribe(h => {
+              const startOffset = h.indexOf('<ul class="list listView episodeList">');
+              let scriptPart = h.substring(startOffset);
+              scriptPart = scriptPart.substring(0, scriptPart.indexOf('</html>'));
+              c.episodes = c.episodes.concat(this.getPodtyEpisodes(scriptPart));
+          });
           break;
         default:
           this.httpService.getMimeText(c.url, 'application/xml').subscribe(x => {
