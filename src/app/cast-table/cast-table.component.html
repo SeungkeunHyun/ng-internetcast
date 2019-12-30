@@ -7,11 +7,19 @@
   </ng-template>
   <ng-template pTemplate="header">
     <tr>
-      <th>Provider</th>
-      <th>Category</th>
-      <th [pSortableColumn]="name">Name</th>
+      <th [pSortableColumn]="'provider'">Provider
+        <p-sortIcon [field]="'provider'"></p-sortIcon>
+      </th>
+      <th [pSortableColumn]="'category'">Category
+        <p-sortIcon [field]="'category'"></p-sortIcon>
+      </th>
+      <th [pSortableColumn]="name">Name
+        <p-sortIcon [field]="'name'"></p-sortIcon>
+      </th>
       <th>Episodes</th>
-      <th [pSortableColumn]="releasedAt">Relased At</th>
+      <th [pSortableColumn]="releasedAt">Relased At
+        <p-sortIcon [field]="'releasedAt'"></p-sortIcon>
+      </th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-cast>

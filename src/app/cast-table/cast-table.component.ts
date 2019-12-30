@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { Cast } from '../core/models/cast/cast.model';
 import { NgxXml2jsonService } from 'ngx-xml2json';
 import { DialogService } from 'primeng/api';
+import { Episode } from '../core/models/episode.model';
 
 @Component({
   selector: 'app-cast-table',
@@ -45,7 +46,19 @@ export class CastTableComponent implements OnInit {
   }
 
   getPodtyEpisodes(hscr: string) {
-    console.log(hscr);
+    const elm = document.createElement('div');
+    let episodes: Episode[] = [];
+    elm.innerHTML = hscr;
+    elm.querySelectorAll('li').forEach(i => {
+      let ep: Episode = new Episode();
+      ep.mediaURL = i.getAttribute('data-play-uri');
+      ep.title = i.getAttribute('data-episode-name');
+      ep.pubDate = new Date(Date.parse(i.querySelector('div.episodeInfo time.date').textContent.replace('.', '-')));
+      ep.duration = i.querySelector('div.episodeInfo time.playTime').textContent;
+      episodes.push(ep);
+      console.log(i);
+    });
+    return episodes;
   }
 
   fetchRSS() {
@@ -72,8 +85,9 @@ export class CastTableComponent implements OnInit {
             , 'text/plain').subscribe(h => {
               const startOffset = h.indexOf('<ul class="list listView episodeList">');
               let scriptPart = h.substring(startOffset);
-              scriptPart = scriptPart.substring(0, scriptPart.indexOf('</html>'));
+              scriptPart = scriptPart.substring(0, scriptPart.indexOf('</ul>') + '</ul>'.length);
               c.episodes = c.episodes.concat(this.getPodtyEpisodes(scriptPart));
+              c.releasedAt = c.episodes[0].pubDate;
           });
           break;
         default:
